@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { OrganizationChartModule } from 'primeng/organizationchart';
 import { TreeNode } from 'primeng/api';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-org-chart',
-  imports: [OrganizationChartModule],
+  imports: [OrganizationChartModule, FormsModule],
   templateUrl: './org-chart.html',
   standalone: true,
   styleUrl: './org-chart.css',
@@ -14,64 +14,71 @@ import { TreeNode } from 'primeng/api';
 export class OrgChart implements OnInit {
   data: TreeNode[] = [
     {
-    label: 'Argentina',
+    label: 'Le',
     type: 'person',
     expanded: true,
     data: {
-        sublabel: 'South america',
-        image: '/argentina.png'
+        name: 'Lê Văn Lê',
+        title: 'Senior Engineer',
+        image: '/Le.jpg'
     },
     children: [
       {
-        label: 'Argentina',
+        label: 'Hao',
         type: 'person',
         expanded: true,
         data: {
-            sublabel: 'South america',
-            image: '/argentina.png'
+            name: 'Dư Vĩ Hào',
+            title: 'Senior Engineer',
+            image: '/Hao.jpg'
         },
         children: [
           {
-            label: 'Argentina',
+            label: 'Anh',
             type: 'person',
             data: {
-                sublabel: 'South america',
-                image: '/argentina.png'
+                name: 'Lê Hoàng Duy Anh',
+                title: 'Engineer',
+                image: '/Anh.jpg'
             },
           },
           {
-            label: 'France',
+            label: 'Huy',
             type: 'person',
             data: {
-                sublabel: 'Euro',
-                image: '/france.png'
+                name: 'Nguyễn Ngọc Thanh Huy',
+                title: 'Senior Engineer',
+                image: '/Huy.jpg'
             },
           }
         ]
       },
       {
-        label: 'France',
+        label: 'Linh',
         expanded: true,
         type: 'person',
         data: {
-            sublabel: 'South america',
-            image: '/france.png'
+            name: 'Huỳnh Công Linh',
+            title: 'Senior Engineer',
+            image: '/Linh.jpg'
         },
         children: [
           {
-            label: 'France',
+            label: 'Minh',
             type: 'person',
             data: {
-                sublabel: 'Euro',
-                image: '/france.png'
+                name: 'Trần Ngọc Minh',
+                title: 'Senior Engineer',
+                image: '/Minh.jpg'
             },
           },
           {
-            label: 'Morocco',
+            label: 'Thai',
             type: 'person',
             data: {
-                sublabel: 'Euro',
-                image: '/morocco.png'
+                name: 'Nguyễn Vũ Thái',
+                title: 'Senior Engineer',
+                image: '/Thai.jpg'
             },
           }
         ]
@@ -81,7 +88,37 @@ export class OrgChart implements OnInit {
   ];
 
   selectedNodes!: TreeNode[];
+  isEditMode: boolean = false;
 
   ngOnInit() {
+  }
+
+  createNode(node: TreeNode) {
+    console.log(node)
+  }
+
+  editNode(node: TreeNode) {
+    if (this.isEditMode) {
+      this.isEditMode = false
+    } else {
+      this.isEditMode = true
+    }
+  }
+
+  deleteNode(node: TreeNode) {
+    console.log(node)
+    this.data = this.removeNode(this.data, node.label || '')
+    console.log(node)
+  }
+
+  removeNode(nodes: any[], label: string): any[] {
+    return nodes
+      .filter(node => node.label !== label)
+      .map(node => ({
+        ...node,
+        children: node.children
+          ? this.removeNode(node.children, label)
+          : []
+      }))
   }
 }

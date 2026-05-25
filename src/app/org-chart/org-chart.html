@@ -1,7 +1,7 @@
 <div class="card flex justify-center overflow-x-auto">
     <p-organization-chart [value]="data"  selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true">
         <ng-template pTemplate="person" let-node>
-            <div class="flex flex-col items-center p-2" style="align-items: center; display: flex; flex-direction: column; gap: 8px;">
+            <div class="flex flex-col items-center p-2" style="align-items: center; display: flex; flex-direction: column; gap: 8px; min-width: 250px">
                 @if (node.data?.image) {
                     <img 
                         [src]="node.data.image" 
@@ -10,15 +10,43 @@
                         alt="avatar" 
                     />
                 }
-                <div class="font-bold text-sm" style="font-weight: bold; font-size: 14px; font-weight: bold;">
-                    {{ node.label }}
-                </div>
-                
-                @if (node.data?.sublabel) {
-                    <div class="text-xs text-muted-color" style="font-size: 12px; color: #6c757d;">
-                        {{ node.data.sublabel }}
-                    </div>
+                @if (node.data?.name) {
+                    @if (isEditMode) {
+                        <input
+                            type="text"
+                            [(ngModel)]="node.data.name"
+                        />
+                    }
+                    @if (!isEditMode) {
+                        <div class="font-bold text-sm" style="font-weight: bold; font-size: 14px; font-weight: bold;">
+                            {{ node.data.name }}
+                        </div>
+                    }
                 }
+                
+                @if (node.data?.title) {
+                    @if (isEditMode) {
+                        <input
+                            type="text"
+                            [(ngModel)]="node.data.title"
+                        />
+                    } 
+                    @if (!isEditMode) {
+                        <div class="text-xs text-muted-color" style="font-size: 12px; color: #6c757d;">
+                            {{ node.data.title }}
+                        </div>
+                    }
+                }
+
+                <!-- <button (click)="createNode(node)">
+                    Create
+                </button>
+                <button (click)="editNode(node)">
+                    Edit
+                </button> -->
+                <button (click)="deleteNode(node)">
+                    Delete
+                </button>
             </div>
         </ng-template>
     </p-organization-chart>
