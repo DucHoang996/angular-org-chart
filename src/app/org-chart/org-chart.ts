@@ -18,84 +18,94 @@ import { InputTextModule } from 'primeng/inputtext';
 export class OrgChart implements OnInit {
   data: TreeNode[] = [
     {
-    label: 'Le',
-    type: 'person',
-    expanded: true,
-    data: {
-        name: 'Lê Văn Lê',
-        title: 'Senior Engineer',
-        image: '/Le.jpg'
-    },
-    children: [
-      {
-        label: 'Hao',
-        type: 'person',
-        expanded: true,
-        data: {
-            name: 'Dư Vĩ Hào',
-            title: 'Senior Engineer',
-            image: '/Hao.jpg'
-        },
-        children: [
-          {
-            label: 'Anh',
-            type: 'person',
-            data: {
-                name: 'Lê Hoàng Duy Anh',
-                title: 'Engineer',
-                image: '/Anh.jpg'
-            },
-          },
-          {
-            label: 'Huy',
-            type: 'person',
-            data: {
-                name: 'Nguyễn Ngọc Thanh Huy',
-                title: 'Senior Engineer',
-                image: '/Huy.jpg'
-            },
-          }
-        ]
+      label: 'Le',
+      type: 'person',
+      expanded: true,
+      data: {
+          name: 'Lê Văn Lê',
+          title: 'Senior Engineer',
+          image: '/Le.jpg'
       },
-      {
-        label: 'Linh',
-        expanded: true,
-        type: 'person',
-        data: {
-            name: 'Huỳnh Công Linh',
-            title: 'Senior Engineer',
-            image: '/Linh.jpg'
-        },
-        children: [
-          {
-            label: 'Minh',
-            type: 'person',
-            data: {
-                name: 'Trần Ngọc Minh',
-                title: 'Senior Engineer',
-                image: '/Minh.jpg'
-            },
+      children: [
+        {
+          label: 'Hao',
+          type: 'person',
+          expanded: true,
+          data: {
+              name: 'Dư Vĩ Hào',
+              title: 'Senior Engineer',
+              image: '/Hao.jpg'
           },
-          {
-            label: 'Thai',
-            type: 'person',
-            data: {
-                name: 'Nguyễn Vũ Thái',
-                title: 'Senior Engineer',
-                image: '/Thai.jpg'
+          children: [
+            {
+              label: 'Anh',
+              type: 'person',
+              data: {
+                  name: 'Lê Hoàng Duy Anh',
+                  title: 'Engineer',
+                  image: '/Anh.jpg'
+              },
             },
-          }
-        ]
-      }
-    ]
-  }
+            {
+              label: 'Huy',
+              type: 'person',
+              data: {
+                  name: 'Nguyễn Ngọc Thanh Huy',
+                  title: 'Senior Engineer',
+                  image: '/Huy.jpg'
+              },
+            }
+          ]
+        },
+        {
+          label: 'Linh',
+          expanded: true,
+          type: 'person',
+          data: {
+              name: 'Huỳnh Công Linh',
+              title: 'Senior Engineer',
+              image: '/Linh.jpg'
+          },
+          children: [
+            {
+              label: 'Minh',
+              type: 'person',
+              data: {
+                  name: 'Trần Ngọc Minh',
+                  title: 'Senior Engineer',
+                  image: '/Minh.jpg'
+              },
+            },
+            {
+              label: 'Thai',
+              type: 'person',
+              data: {
+                  name: 'Nguyễn Vũ Thái',
+                  title: 'Senior Engineer',
+                  image: '/Thai.jpg'
+              },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'An',
+      type: 'person',
+      expanded: true,
+      data: {
+          name: 'Nguyễn Trường An',
+          title: 'Engineer',
+          image: '/An.jpg'
+      },
+    }
   ];
 
   selectedNodes!: TreeNode[];
-  isEditMode: boolean = false;
+  // isEditMode: boolean = false;
   isMenuOpen: boolean = false;
   selectedMenuNode: TreeNode | null = null;
-  selectedNode: TreeNode | null = null;
+  // selectedNode: TreeNode | null = null;
   editName: string = '';
   editTitle: string = '';
   editImage: string = '';
@@ -104,6 +114,7 @@ export class OrgChart implements OnInit {
     this.expandAll(this.data);
   }
 
+  // expand org chart
   expandAll(nodes: TreeNode[]) {
     nodes.forEach(node => {
       node.expanded = true;
@@ -113,7 +124,9 @@ export class OrgChart implements OnInit {
     });
   }
 
-  // Mark Selected
+  // Chọn node trên org chart:
+  // - Nếu isUpdateMode = true: mở drawer để sửa thông tin node (name/title/image)
+  // - Nếu isUpdateMode = false: chỉ lưu node đang được chọn để thao tác (thêm/xóa/...)
   onNodeSelect(event: any, isUpdateMode: boolean) {
     if (isUpdateMode) {
       this.selectedMenuNode = event.node;
@@ -125,12 +138,12 @@ export class OrgChart implements OnInit {
       this.selectedMenuNode = event.node;
     }
   }
-  // Mark Unselected
+  // Bỏ chọn node hiện tại
   onNodeUnselect() {
     this.selectedMenuNode = null;
   }
 
-  // Hide menu update
+  // Đóng drawer chỉnh sửa và reset trạng thái chọn/chỉnh sửa tạm thời
   onDrawerHide() {
     // 1. Xóa sạch các nút đang được chọn (tô xanh) trên sơ đồ Org Chart
     this.selectedNodes = [];
@@ -140,7 +153,7 @@ export class OrgChart implements OnInit {
     this.editImage = '';
   }
 
-  // Add new member to org chart
+  // Thêm nhân sự con vào node đang chọn
   addMember() {
     if (!this.selectedMenuNode) {
       alert('choose node before add!');
@@ -163,6 +176,7 @@ export class OrgChart implements OnInit {
     }
   }
 
+  // Xóa nhân sự đang chọn khỏi org chart
   deleteMember() {
     if (!this.selectedMenuNode) {
       alert('Vui lòng chọn 1 vị trí trên cây trước khi xóa!');
@@ -173,6 +187,7 @@ export class OrgChart implements OnInit {
     this.data = updatedTree;
   }
 
+  // Lưu thông tin chỉnh sửa nhân sự từ drawer bên phải
   updateMember() {
     if (this.selectedMenuNode) {
       this.selectedMenuNode.data.name = this.editName;
@@ -185,7 +200,9 @@ export class OrgChart implements OnInit {
     }
   }
 
-  // Choose image for menu update
+  // Upload ảnh khi chỉnh sửa nhân sự:
+  // - Kiểm tra đúng định dạng ảnh
+  // - Chuyển ảnh sang Base64 để hiển thị/lưu tạm vào editImage
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -204,6 +221,7 @@ export class OrgChart implements OnInit {
     }
   }
 
+  // filter to remove selected member from data
   private filterNodeFromTree(nodes: TreeNode[], targetNode: TreeNode): TreeNode[] {
     if (!nodes) return [];
 
@@ -226,77 +244,214 @@ export class OrgChart implements OnInit {
       });
   }
 
+  // move selected member before the previous member
   moveUp(event: any) {
-    if (this.selectedMenuNode) {
-      this.moveNodeDirection('up');
-      this.selectedMenuNode.expanded = true;
-      this.data = [...this.data]
-      // this.selectedMenuNode = null;
-    }
+    this.moveNodeDirection('up');
   }
 
-  // Nút bấm di chuyển xuống (▼) gọi hàm này
+  // move selected member after the next member
   moveDown(event: any) {
-    if (this.selectedMenuNode) {
-      this.moveNodeDirection('down');
-      this.selectedMenuNode.expanded = true;
-      this.data = [...this.data]
-      // this.selectedMenuNode = null;
-    }
-
+    this.moveNodeDirection('down');
   }
 
-  // Hàm điều hướng chung
   private moveNodeDirection(direction: 'up' | 'down') {
     if (!this.selectedMenuNode) {
       alert('Vui lòng chọn 1 thành viên để dịch chuyển!');
       return;
     }
 
-    // Gọi 1 hàm đệ quy duy nhất xử lý cho cả 2 chiều
-    const isMoved = this.moveNodeInTree(this.data, this.selectedMenuNode, direction);
+    // 1. Create new data with new position of selected member
+    const updatedTree = this.reorderTree(this.data, this.selectedMenuNode, direction);
 
-    if (isMoved) {
-      this.data = [...this.data]; // Refresh lại giao diện cây
+    if (updatedTree) {
+      // 2. Lưu lại node đang chọn để khôi phục tiêu điểm tô xanh
+      const currentSelected = this.selectedMenuNode;
+      
+      // 3. Giải phóng tiêu điểm tạm thời
+      this.selectedMenuNode = null;
+
+      // 4. Gán cây mới tinh vào data -> Ép p-tree bắt buộc phải render lại thứ tự mới
+      this.data = updatedTree;
+
+      // 5. Khôi phục lại tiêu điểm chọn ngay sau đó
+      setTimeout(() => {
+        this.selectedMenuNode = currentSelected;
+      }, 0);
     }
   }
 
-  // HÀM GỘP ĐỆ QUY DUY NHẤT
-  private moveNodeInTree(nodes: TreeNode[], targetNode: TreeNode, direction: 'up' | 'down'): boolean {
-    if (!nodes) return false;
+  // Hàm đệ quy tạo cây mới và đảo vị trí phần tử (Không can thiệp mảng cũ)
+  private reorderTree(nodes: TreeNode[], targetNode: TreeNode, direction: 'up' | 'down'): TreeNode[] | null {
+    if (!nodes) return null;
 
-    // 1. Tìm vị trí của node hiện tại trong mảng cấp này
+    // Bước 1: Tìm xem node cần dịch chuyển có nằm ở cấp này không
     const index = nodes.findIndex(node => node === targetNode || (node.label === targetNode.label && node.type === targetNode.type));
 
     if (index > -1) {
-      // Tính toán vị trí mới dựa vào hướng truyền vào
       const newIndex = direction === 'up' ? index - 1 : index + 1;
 
-      // Kiểm tra nếu vượt quá biên (Đầu mảng khi lên hoặc cuối mảng khi xuống)
       if (newIndex < 0 || newIndex >= nodes.length) {
         alert(direction === 'up' ? 'Thành viên này đã ở vị trí đầu tiên!' : 'Thành viên này đã ở vị trí cuối cùng!');
+        return null;
+      }
+
+      // Tạo mảng mới tinh sao chép từ mảng cấp này
+      const newNodes = [...nodes];
+      // Hoán đổi vị trí trên mảng mới
+      const temp = newNodes[index];
+      newNodes[index] = newNodes[newIndex];
+      newNodes[newIndex] = temp;
+
+      return newNodes;
+    }
+
+    // Bước 2: Duyệt sâu vào các nhánh con và tạo cấu trúc cây mới sâu xuống dưới
+    let childMoved = false;
+    const updatedNodes = nodes.map(node => {
+      if (node.children && node.children.length > 0) {
+        const newChildren = this.reorderTree(node.children, targetNode, direction);
+        if (newChildren) {
+          childMoved = true;
+          return {
+            ...node,
+            children: newChildren // Gán mảng children mới tinh đã được đổi chỗ con
+          };
+        }
+      }
+      return node;
+    });
+
+    return childMoved ? updatedNodes : null;
+  }
+
+  // move selected member to children level
+  demoteNode() {
+    if (!this.selectedMenuNode) return;
+
+    const currentSelected = this.selectedMenuNode;
+    this.selectedMenuNode = null;
+
+    // Gọi hàm xử lý cấu trúc mới
+    const isSuccess = this.flattenNodeDown(null, this.data, currentSelected);
+
+    if (isSuccess) {
+      this.data = this.data.map(rootNode => ({ ...rootNode }));
+    }
+    
+    setTimeout(() => { this.selectedMenuNode = currentSelected; }, 0);
+  }
+
+  // move selected member to children level
+  private flattenNodeDown(parent: TreeNode | null, currentLevelNodes: TreeNode[], target: TreeNode): boolean {
+    if (!currentLevelNodes) return false;
+
+    const index = currentLevelNodes.findIndex(n => n === target || (n.label === target.label && n.type === target.type));
+
+    if (index > -1) {
+      // Để đẩy Hào xuống cùng cấp với con và nhận Cha của Hào làm cha chung, bắt buộc Hào phải có Cha (parent)
+      if (!parent) {
+        alert('Thành viên này ở cấp cao nhất, không thể đẩy xuống cùng cấp với con dưới quyền của cấp trên!');
         return false;
       }
 
-      // Tiến hành hoán đổi vị trí (Swap)
-      const temp = nodes[index];
-      nodes[index] = nodes[newIndex];
-      nodes[newIndex] = temp;
+      // Lấy danh sách con hiện tại của Hào (Anh, Huy)
+      const targetChildren = target.children || [];
 
+      // 1. Đưa toàn bộ con của Hào ra mảng của Cha (Lê) trước
+      if (targetChildren.length > 0) {
+        parent.children?.push(...targetChildren);
+      }
+
+      // 2. Xóa mảng con của Hào đi (vì các con đã thoát ly ra cùng cấp rồi)
+      target.children = [];
+
+      // 3. Lúc này Hào vẫn đang nằm ở vị trí cũ trong mảng của Lê, các con thì vừa được push vào đuôi mảng.
+      // Nếu bạn muốn Hào đứng đầu hoặc đứng chung hàng thì cấu trúc mảng parent.children bây giờ 
+      // đã bao gồm cả Lê Hoàng Duy Anh, Nguyễn Ngọc Thanh Huy và Dư Vĩ Hào dưới trướng của Lê Văn Lê.
+      
       return true;
     }
 
-    // 2. Nếu không thấy ở cấp này, tiếp tục đệ quy xuống các nhánh con children
-    for (const node of nodes) {
-      if (node.children && node.children.length > 0) {
-        const moved = this.moveNodeInTree(node.children, targetNode, direction);
-        if (moved) {
-          node.children = [...node.children]; // Cập nhật tham chiếu mảng con
-          return true;
-        }
+    // Duyệt đệ quy sâu vào các nhánh để tìm target
+    for (const node of currentLevelNodes) {
+      if (node.children && this.flattenNodeDown(node, node.children, target)) {
+        node.children = [...node.children];
+        return true;
       }
     }
-
     return false;
+  }
+
+  // move selected member to parent level
+  promoteNode() {
+    if (!this.selectedMenuNode) return;
+
+    const currentSelected = this.selectedMenuNode;
+    this.selectedMenuNode = null;
+
+    // Thực hiện tìm kiếm và đẩy ra ngoài
+    const isSuccess = this.outdentNode(null, this.data, currentSelected);
+
+    if (isSuccess) {
+      currentSelected.expanded = true;
+      this.data = this.data.map(rootNode => ({ ...rootNode }));
+    }
+
+    setTimeout(() => { this.selectedMenuNode = currentSelected; }, 50);
+  }
+
+  // move selected member to parent level
+  private outdentNode(parent: TreeNode | null, currentLevelNodes: TreeNode[], target: TreeNode): boolean {
+    if (!currentLevelNodes) return false;
+
+    const index = currentLevelNodes.findIndex(n => n === target || (n.label === target.label && n.type === target.type));
+
+    if (index > -1) {
+      // Nếu không có parent tức là node đang ở cấp cao nhất (gốc cây), không thể ra ngoài được nữa
+      if (!parent) {
+        alert('Thành viên này đã ở cấp cao nhất của sơ đồ!');
+        return false;
+      }
+
+      // Bốc target ra khỏi mảng con hiện tại
+      currentLevelNodes.splice(index, 1);
+
+      // Tìm vị trí của chính Node Cha trong cây dữ liệu tổng để nhét target đứng ngay sau Cha
+      this.insertAfterParent(this.data, parent, target);
+      return true;
+    }
+
+    for (const node of currentLevelNodes) {
+      if (node.children && this.outdentNode(node, node.children, target)) {
+        node.children = [...node.children];
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // move selected member to parent level
+  // Find parent node to place after parent node
+  private insertAfterParent(upperLevelNodes: TreeNode[], parentNode: TreeNode, nodeToInsert: TreeNode): boolean {
+    const parentIndex = upperLevelNodes.findIndex(n => n === parentNode || (n.label === parentNode.label && n.type === parentNode.type));
+
+    if (parentIndex > -1) {
+      // Thêm node vào ngay sau vị trí của Node Cha
+      upperLevelNodes.splice(parentIndex + 1, 0, nodeToInsert);
+      return true;
+    }
+
+    for (const node of upperLevelNodes) {
+      if (node.children && this.insertAfterParent(node.children, parentNode, nodeToInsert)) {
+        node.children = [...node.children];
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // save ort chart with new data(implement call api)
+  saveOrgChart() {
+    console.log(this.data)
   }
 }

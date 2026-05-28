@@ -1,10 +1,13 @@
 <div style="display: flex; gap: 20px; padding: 20px; height: 100vh;">
     <div style="width: 300px; border: 1px solid #ccc; display: flex; flex-direction: column; background: #fff;">
+        <div style="text-align: center; padding: 10px;">
+            <button (click)="saveOrgChart()" style="border: none; background: transparent; cursor: pointer; color: green; font-size: 18px; font-weight: bold;">Save org chart</button>
+        </div>
         <div style="display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #ccc; background: #f8f9fa;">
             <button (click)="addMember()" style="border: none; background: transparent; cursor: pointer; color: green; font-size: 18px; font-weight: bold;">＋</button>
             <button (click)="deleteMember()" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">－</button>
-            <button (click)="deleteMember()" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">⬅️</button>
-            <button (click)="deleteMember()" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">➡️</button>
+            <button (click)="promoteNode()" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">⬅️</button>
+            <button (click)="demoteNode()" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">➡️</button>
             <button (click)="moveUp($event)" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">⬆️</button>
             <button (click)="moveDown($event)" style="border: none; background: transparent; cursor: pointer; color: red; font-size: 18px; font-weight: bold;">⬇️</button>
         </div>
@@ -58,7 +61,44 @@
         </div>
     </div>
     <div style="flex: 1; border: 1px solid #ccc; overflow: auto; padding: 20px; background: #fafafa; display: flex; justify-content: center;">
-        <p-organization-chart [value]="data"  selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true" (onNodeSelect)="onNodeSelect($event, true)" >
+        @for (rootNode of data; track rootNode) {
+            <p-organization-chart [value]="[rootNode]"  selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true" (onNodeSelect)="onNodeSelect($event, true)" >
+                <ng-template pTemplate="person" let-node>
+                    <div class="flex flex-col items-center p-2" style="align-items: center; display: flex; flex-direction: column; gap: 8px; min-width: 250px">
+                        @if (node.data?.image) {
+                            <img 
+                                [src]="node.data.image" 
+                                class="w-12 h-12 rounded-full border shadow" 
+                                style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" 
+                                alt="avatar" 
+                            />
+                        }
+                        @if (node.data?.name) {
+                            <div class="font-bold text-sm 111" style="font-weight: bold; font-size: 14px; font-weight: bold;">
+                                {{ node.data.name }}
+                            </div>
+                        }
+                        
+                        @if (node.data?.title) {
+                            <div class="text-xs text-muted-color 222" style="font-size: 12px; color: #6c757d;">
+                                {{ node.data.title }}
+                            </div>
+                        }
+
+                        <!-- <button (click)="createNode(node)">
+                            Create
+                        </button>
+                        <button (click)="editNode(node)">
+                            Edit
+                        </button> -->
+                        <!-- <button (click)="deleteNode(node)">
+                            Delete
+                        </button> -->
+                    </div>
+                </ng-template>
+            </p-organization-chart>
+        }
+        <!-- <p-organization-chart [value]="data"  selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true" (onNodeSelect)="onNodeSelect($event, true)" >
             <ng-template pTemplate="person" let-node>
                 <div class="flex flex-col items-center p-2" style="align-items: center; display: flex; flex-direction: column; gap: 8px; min-width: 250px">
                     @if (node.data?.image) {
@@ -81,7 +121,7 @@
                         </div>
                     }
 
-                    <!-- <button (click)="createNode(node)">
+                    <button (click)="createNode(node)">
                         Create
                     </button>
                     <button (click)="editNode(node)">
@@ -89,10 +129,10 @@
                     </button> -->
                     <!-- <button (click)="deleteNode(node)">
                         Delete
-                    </button> -->
+                    </button>
                 </div>
             </ng-template>
-        </p-organization-chart>
+        </p-organization-chart> -->
     </div>
 </div>
 
